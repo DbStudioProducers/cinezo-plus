@@ -1,0 +1,23 @@
+{
+  "name": "cinezo-plus",
+  "version": "1.0.0",
+  "description": "CineZo+ - Streaming app com conteudo de cinezo.net",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "cap:init": "npx cap init CineZo+ com.cinezoplus --web-dir=www",
+    "cap:add:android": "npx cap add android",
+    "cap:add:ios": "npx cap add ios",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.0",
+    "@capacitor/core": "^6.1.0",
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/ios": "^6.1.0",
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/status-bar": "^6.0.0"
+  },
+  "license": "MIT"
+}
