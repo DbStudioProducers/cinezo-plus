@@ -4,12 +4,27 @@
   "webDir": "www",
   "server": {
     "androidScheme": "https",
-    "allowNavigation": ["cinezo.net", "*.cinezo.net"]
+    "allowNavigation": ["*"]
   },
   "plugins": {
-    "StatusBar": {"style": "dark", "backgroundColor": "#0b1021"},
-    "App": {"logsEnabled": false}
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "StatusBar": {
+      "style": "dark",
+      "backgroundColor": "#0b1021"
+    },
+    "App": {
+      "logsEnabled": true
+    }
   },
-  "android": {"backgroundColor": "#0b1021", "allowMixedContent": true},
-  "ios": {"backgroundColor": "#0b1021", "contentInset": "automatic"}
+  "android": {
+    "backgroundColor": "#0b1021",
+    "allowMixedContent": true,
+    "useLegacyBridge": false
+  },
+  "ios": {
+    "backgroundColor": "#0b1021",
+    "contentInset": "automatic"
+  }
 }
