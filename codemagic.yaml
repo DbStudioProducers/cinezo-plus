@@ -13,12 +13,10 @@ workflows:
     scripts:
       - name: Instalar dependencias
         script: npm install
-      - name: Inicializar Capacitor
-        script: npx cap init CineZo+ com.cinezoplus --web-dir=www || true
       - name: Adicionar plataforma Android
-        script: npx cap add android || true
+        script: npm run cap:add:android
       - name: Sincronizar assets
-        script: npx cap sync android
+        script: npm run cap:sync
       - name: Build APK
         script: |
           cd android
@@ -28,7 +26,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - seu-email@exemplo.com
+          yggdrasilagencia@gmail.com
         notify:
           success: true
           failure: true
@@ -52,12 +50,10 @@ workflows:
     scripts:
       - name: Instalar dependencias
         script: npm install
-      - name: Inicializar Capacitor
-        script: npx cap init CineZo+ com.cinezoplus --web-dir=www || true
       - name: Adicionar plataforma Android
-        script: npx cap add android || true
+        script: npm run cap:add:android
       - name: Sincronizar
-        script: npx cap sync android
+        script: npm run cap:sync
       - name: Decodificar keystore
         script: echo $KEYSTORE_BASE64 | base64 --decode > android/keystore.jks
       - name: Build Release
@@ -86,12 +82,10 @@ workflows:
     scripts:
       - name: Instalar dependencias
         script: npm install
-      - name: Inicializar Capacitor
-        script: npx cap init CineZo+ com.cinezoplus --web-dir=www || true
       - name: Adicionar iOS
-        script: npx cap add ios || true
+        script: npm run cap:add:ios
       - name: Sincronizar
-        script: npx cap sync ios
+        script: npm run cap:sync
       - name: Build iOS
         script: |
           cd ios/App
@@ -101,4 +95,4 @@ workflows:
     publishing:
       email:
         recipients:
-          - seu-email@exemplo.com
+          yggdrasilagencia@gmail.com
