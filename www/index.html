@@ -19,14 +19,12 @@ html{-webkit-tap-highlight-color:transparent}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;min-height:100dvh}
 ::-webkit-scrollbar{height:3px;width:3px}::-webkit-scrollbar-thumb{background:var(--bg-e);border-radius:9px}
 a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;-webkit-tap-highlight-color:transparent}img{display:block;max-width:100%}
-
 #splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s,visibility .4s}
 #splash.gone{opacity:0;visibility:hidden;pointer-events:none}
 #splash .logo{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,#0063e5,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 #splash .bar{margin-top:20px;width:140px;height:3px;background:var(--bg-c);border-radius:3px;overflow:hidden}
 #splash .fill{height:100%;width:0;background:linear-gradient(90deg,#0063e5,#00d4ff);animation:lf 1.6s ease forwards}
 @keyframes lf{to{width:100%}}
-
 #nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding-top:var(--safe-top);height:calc(var(--nav) + var(--safe-top));display:flex;align-items:center;gap:10px;padding-left:14px;padding-right:14px;background:rgba(11,16,33,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
 .brand{font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,#0063e5,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;width:38px;text-align:center;flex-shrink:0}
 .cats{display:flex;gap:3px;flex:1;overflow-x:auto;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}
@@ -39,9 +37,7 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 .srch input{width:100%;height:100%;padding:0 10px 0 28px;background:var(--bg-c);border:1px solid var(--bd);border-radius:16px;color:var(--tx);font-size:.78rem;outline:none;opacity:0;transition:.2s}
 .srch.open input{opacity:1}.srch input:focus{border-color:var(--acc)}
 .srch .sb{position:absolute;right:0;top:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:var(--tx-m);font-size:.82rem;z-index:2}
-
 #app{padding-top:calc(var(--nav) + var(--safe-top));min-height:100dvh}
-
 #hero{position:relative;width:100%;height:55vh;min-height:320px;overflow:hidden}
 #hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 20%;transition:opacity .6s}
 #hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,rgba(11,16,33,.4) 50%,rgba(11,16,33,.3) 100%),linear-gradient(90deg,rgba(11,16,33,.85) 0%,transparent 50%)}
@@ -54,7 +50,6 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 .bg{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:5px;background:rgba(255,255,255,.1);color:#fff;font-size:.85rem;font-weight:600;border:1px solid rgba(255,255,255,.1);transition:.2s}
 #dots{position:absolute;bottom:5%;left:20px;display:flex;gap:5px;z-index:2}
 #dots button{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:.3s}#dots button.on{background:#fff;width:20px;border-radius:3px}
-
 .sec{padding:0 20px 28px;margin-bottom:6px}.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.sec-h h2{font-size:1.05rem;font-weight:800}
 .cw{position:relative}.cr{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 0 10px;scrollbar-width:none}.cr::-webkit-scrollbar{display:none}
 .cd{flex:0 0 auto;width:140px;border-radius:var(--rad);overflow:hidden;position:relative;cursor:pointer;scroll-snap-align:start;transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s;background:var(--bg-c)}
@@ -68,7 +63,6 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 .cw:hover .arr{opacity:1}.arr:hover{background:rgba(0,99,229,.7)}.arr.l{left:0}.arr.r{right:0}
 .sk{flex:0 0 auto;width:140px;border-radius:var(--rad);overflow:hidden;background:var(--bg-c)}.sk .si{width:100%;aspect-ratio:16/9;background:linear-gradient(90deg,var(--bg-c) 25%,var(--bg-e) 50%,var(--bg-c) 75%);background-size:200% 100%;animation:sh 1.4s infinite}
 @keyframes sh{0%{background-position:200% 0}to{background-position:-200% 0}}
-
 #mdl-ov{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.85);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:.3s}
 #mdl-ov.on{opacity:1;visibility:visible}
 #mdl{width:100%;max-width:560px;max-height:90vh;background:var(--bg-s);border-radius:14px 14px 0 0;overflow-y:auto;transform:translateY(100%);transition:transform .4s cubic-bezier(.23,1,.32,1)}
@@ -88,7 +82,6 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 .srvs .sl{display:flex;gap:6px;flex-wrap:wrap}
 .srvs button{padding:5px 12px;border-radius:5px;background:var(--bg-c);border:1px solid var(--bd);font-size:.72rem;font-weight:600;color:var(--tx-m);transition:.2s}
 .srvs button:hover,.srvs button.on{border-color:var(--acc);color:var(--acc);background:rgba(0,99,229,.08)}
-
 #player{position:fixed;inset:0;z-index:3000;background:#000;display:none;flex-direction:column}
 #player.on{display:flex}
 #p-bar{padding-top:var(--safe-top);height:calc(44px + var(--safe-top));display:flex;align-items:center;gap:10px;padding-left:10px;padding-right:10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);position:absolute;top:0;left:0;right:0;z-index:10;transition:opacity .3s}
@@ -103,7 +96,6 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 #p-err{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--tx-m);text-align:center;padding:24px;z-index:5}
 #p-err i{font-size:2rem;color:var(--tx-d)}
 #p-tap{position:absolute;inset:0;z-index:4}
-
 #toasts{position:fixed;top:calc(var(--nav) + var(--safe-top) + 6px);right:10px;z-index:5000;display:flex;flex-direction:column;gap:5px}
 .tst{padding:8px 14px;border-radius:var(--rad);background:var(--bg-e);border:1px solid var(--bd);font-size:.78rem;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.4);animation:tin .3s ease-out;display:flex;align-items:center;gap:6px}
 .tst.e{border-color:#e53e3e;color:#fc8181}.tst.s{border-color:#38a169;color:#68d391}.tst.i{border-color:var(--acc);color:#63b3ed}
@@ -117,7 +109,6 @@ footer{padding:20px 16px calc(20px + var(--safe-bottom));text-align:center;color
 </head>
 <body>
 <div id="splash"><div class="logo">CineZo+</div><div class="bar"><div class="fill"></div></div></div>
-
 <nav id="nav">
   <div class="brand">CZ+</div>
   <div class="cats" id="cats">
@@ -133,7 +124,6 @@ footer{padding:20px 16px calc(20px + var(--safe-bottom));text-align:center;color
   </div>
   <button class="nbtn" id="refbtn"><i class="fas fa-sync-alt"></i></button>
 </nav>
-
 <main id="app">
   <div id="hero">
     <div id="hero-bg"></div>
@@ -151,7 +141,6 @@ footer{padding:20px 16px calc(20px + var(--safe-bottom));text-align:center;color
   <div id="secs"></div>
   <footer>CineZo+ v2.0</footer>
 </main>
-
 <div id="mdl-ov">
   <div id="mdl">
     <button id="mdl-close"><i class="fas fa-times"></i></button>
@@ -174,7 +163,6 @@ footer{padding:20px 16px calc(20px + var(--safe-bottom));text-align:center;color
     </div>
   </div>
 </div>
-
 <div id="player">
   <div id="p-bar">
     <button class="pb" id="p-back"><i class="fas fa-arrow-left"></i></button>
@@ -188,65 +176,62 @@ footer{padding:20px 16px calc(20px + var(--safe-bottom));text-align:center;color
     <div id="p-tap"></div>
   </div>
 </div>
-
 <div id="toasts"></div>
-
 <script>
 var BASE='https://cinezo.net';
 var S={items:[],hero:[],hi:0,hTimer:null,cat:'home',q:'',cur:null,vurls:[],barT:null};
 
-/* === UTIL === */
 function ru(u,b){b=b||BASE;if(!u)return'';if(/^https?:/.test(u))return u;if(/^\/\//.test(u))return'https:'+u;if(u[0]==='/')return b+u;return b+'/'+u}
 function toast(m,t){t=t||'i';var c=document.getElementById('toasts'),e=document.createElement('div');e.className='tst '+t[0];var ic=t==='e'?'exclamation-circle':t==='s'?'check-circle':'info-circle';e.innerHTML='<i class="fas fa-'+ic+'"></i>'+m;c.appendChild(e);setTimeout(function(){e.style.opacity='0';e.style.transition='opacity .3s';setTimeout(function(){e.remove()},300)},3000)}
 
-/* === FETCH: Nativo > Proxy1 > Proxy2 > Proxy3 === */
-function isNative(){return !!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())}
+/* === FETCH: Nativo > Proxies === */
+function getNativeHttp(){
+  try{
+    var p=window.Capacitor&&window.Capacitor.Plugins;
+    return p&&(p.CapacitorCommunityHttp||p.Http)||null;
+  }catch(e){return null}
+}
 
 function nfetch(url){
   return new Promise(function(resolve,reject){
-    var tried=0;
-    var methods=[];
-    
-    // Metodo 1: fetch direto (no Capacitor com HTTP plugin, bypassa CORS)
-    methods.push(function(){
-      return fetch(url,{headers:{'Accept':'text/html'}}).then(function(r){
-        if(!r.ok)throw new Error('status '+r.status);
-        return r.text();
-      });
-    });
-    
-    // Metodo 2-4: Proxies CORS
-    var proxies=[
-      function(u){return'https://api.allorigins.win/get?url='+encodeURIComponent(u)},
-      function(u){return'https://corsproxy.io/?'+encodeURIComponent(u)},
-      function(u){return'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u)}
-    ];
-    for(var i=0;i<proxies.length;i++){
-      (function(px){
-        methods.push(function(){
-          return fetch(px(url)).then(function(r){
-            if(!r.ok)throw new Error('proxy status '+r.status);
-            return r.text();
-          }).then(function(t){
-            try{var j=JSON.parse(t);if(j.contents)return j.contents}catch(e){}
-            return t;
-          });
-        });
-      })(proxies[i]);
-    }
-    
-    function tryNext(){
-      if(tried>=methods.length){reject(new Error('Todos os metodos falharam'));return}
-      var fn=methods[tried];
-      tried++;
-      fn().then(function(html){
-        if(html&&html.length>200){resolve(html)}else{tryNext()}
+    var native=getNativeHttp();
+    if(native&&native.get){
+      native.get({url:url,responseType:'text'}).then(function(res){
+        var html=(typeof res==='string')?res:(res.data||res.html||'');
+        if(html&&html.length>100){
+          console.log('[nfetch] Nativo OK:',html.length);
+          resolve(html);
+        }else{
+          console.log('[nfetch] Nativo vazio, tentando proxies');
+          pxFetch(url).then(resolve).catch(reject);
+        }
       }).catch(function(e){
-        console.log('Metodo '+tried+' falhou:',e.message);
-        tryNext();
+        console.log('[nfetch] Nativo erro:',e);
+        pxFetch(url).then(resolve).catch(reject);
       });
+      return;
     }
-    tryNext();
+    pxFetch(url).then(resolve).catch(reject);
+  });
+}
+
+function pxFetch(url){
+  var tried=0;
+  var px=[
+    function(u){return'https://api.allorigins.win/get?url='+encodeURIComponent(u)},
+    function(u){return'https://corsproxy.io/?'+encodeURIComponent(u)},
+    function(u){return'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u)}
+  ];
+  return new Promise(function(resolve,reject){
+    function tn(){
+      if(tried>=px.length){reject(new Error('Proxies falharam'));return}
+      var p=px[tried];tried++;
+      fetch(p(url)).then(function(r){if(!r.ok)throw new Error('status');return r.text()}).then(function(t){
+        try{var j=JSON.parse(t);if(j.contents){resolve(j.contents);return}}catch(e){}
+        resolve(t);
+      }).catch(function(){tn()});
+    }
+    tn();
   });
 }
 
@@ -265,7 +250,6 @@ function extractVids(html,base){base=base||BASE;var dp=new DOMParser(),doc=dp.pa
 var ifs=doc.querySelectorAll('iframe[src],iframe[data-src],iframe[data-lazy-src]');for(var i=0;i<ifs.length;i++){var s=ifs[i].getAttribute('src')||ifs[i].getAttribute('data-src')||ifs[i].getAttribute('data-lazy-src')||'';if(s)ad(s)}
 var vs=doc.querySelectorAll('video[src],video source[src],source[src]');for(var i=0;i<vs.length;i++){var v=vs[i].getAttribute('src')||'';if(v&&/\.(mp4|m3u8|webm)/i.test(v))ad(v)}
 var scs=doc.querySelectorAll('script:not[src]');for(var i=0;i<scs.length;i++){var t=scs[i].textContent,ms=t.match(/["'](https?:\/\/[^"']*\.(?:mp4|m3u8|webm)[^"']*)["']/g);if(ms)for(var j=0;j<ms.length;j++)ad(ms[j].replace(/["']/g,''))}
-var dEls=doc.querySelectorAll('[data-src*="player"],[data-src*="embed"],[data-url*="player"],[data-url*="video"],[data-source]');for(var i=0;i<dEls.length;i++){var ds=dEls[i].getAttribute('data-src')||dEls[i].getAttribute('data-url')||dEls[i].getAttribute('data-source')||'';if(ds)ad(ds)}
 return urls}
 
 function extractInfo(html,base){base=base||BASE;var dp=new DOMParser(),doc=dp.parseFromString(html,'text/html');var desc='',year='',genre='',rating='';var de=doc.querySelector('.description,.synopsis,.sinopse,.plot,.summary,.entry-content p,.content p,article p');if(de)desc=de.textContent.trim();if(desc.length>400)desc=desc.substring(0,400)+'...';var ye=doc.querySelector('.year,[class*="year"],[class*="ano"],.date');if(ye)year=ye.textContent.trim().replace(/[^0-9]/g,'').substring(0,4);var ge=doc.querySelector('.genre,[class*="genre"],[class*="genero"],.category a');if(ge)genre=ge.textContent.trim();var re=doc.querySelector('.rating,[class*="rating"],[class*="nota"],.score,.imdb');if(re)rating=re.textContent.trim().replace(/[^0-9.,]/g,'');return{desc:desc,year:year,genre:genre,rating:rating}}
@@ -316,7 +300,6 @@ document.addEventListener('touchend',function(){pulling=false},{passive:true});
 
 /* === INIT === */
 function init(){
-  // Nav events
   document.getElementById('hplay').onclick=function(){if(S.hero.length)playItem(S.hero[S.hi])};
   document.getElementById('hinfo').onclick=function(){if(S.hero.length)openMdl(S.hero[S.hi])};
   document.getElementById('mdl-close').onclick=closeMdl;
@@ -325,48 +308,35 @@ function init(){
   document.getElementById('p-fs').onclick=function(){var w=document.getElementById('p-wrap');if(w.requestFullscreen)w.requestFullscreen();else if(w.webkitRequestFullscreen)w.webkitRequestFullscreen()};
   document.getElementById('p-tap').onclick=toggleBar;
   document.getElementById('refbtn').onclick=doRefresh;
-  
-  // Search
   var sr=document.getElementById('srch'),si=document.getElementById('sinp'),sb=document.getElementById('sbtn');
   sb.onclick=function(){sr.classList.toggle('open');if(sr.classList.contains('open'))si.focus()};
   var stm;si.oninput=function(e){clearTimeout(stm);stm=setTimeout(function(){S.q=e.target.value.trim();rAll()},300)};
-  
-  // Categories
   document.getElementById('cats').onclick=function(e){var b=e.target.closest('button[data-c]');if(b)loadCat(b.getAttribute('data-c'))};
-  
-  // Scroll
   window.addEventListener('scroll',function(){document.getElementById('nav').style.boxShadow=window.scrollY>30?'0 2px 12px rgba(0,0,0,.3)':'none'},{passive:true});
-  
-  // Keyboard
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.getElementById('player').classList.contains('on'))closePlayer();else closeMdl()}});
-  
-  // Load content
-  console.log('[CineZo+] Iniciando... Nativo:',isNative());
+
+  console.log('[CineZo+] Iniciando... Nativo:',!!getNativeHttp());
   toast('Conectando...','i');
-  
+
   nfetch(BASE).then(function(html){
-    console.log('[CineZo+] HTML recebido:',html.length,'chars');
+    console.log('[CineZo+] HTML:',html.length,'chars');
     var items=parse(html);
-    console.log('[CineZo+] Itens parseados:',items.length);
-    if(!items.length)throw new Error('Nenhum item encontrado');
-    S.items=items;
-    S.hero=items.filter(function(i){return i.img&&i.title}).slice(0,8);
-    S.hi=0;rHero();rHT();rAll();
+    console.log('[CineZo+] Itens:',items.length);
+    if(!items.length)throw new Error('vazio');
+    S.items=items;S.hero=items.filter(function(i){return i.img&&i.title}).slice(0,8);S.hi=0;rHero();rHT();rAll();
     toast(items.length+' conteudos carregados!','s');
   }).catch(function(e){
     console.error('[CineZo+] Erro:',e);
-    toast('Erro ao carregar. Toque em atualizar.','e');
+    toast('Erro. Toque em atualizar.','e');
     document.getElementById('htitle').textContent='CineZo+';
-    document.getElementById('hdesc').textContent='Toque no botao de atualizar para tentar novamente';
+    document.getElementById('hdesc').textContent='Toque no botao de atualizar';
     document.getElementById('hero-bg').style.background='linear-gradient(135deg,#0b1021,#1a2240,#0b1021)';
     document.getElementById('secs').innerHTML='<div class="empty"><i class="fas fa-sync-alt"></i><h3>Toque em atualizar</h3><p>O conteudo sera carregado do site</p></div>';
   });
-  
-  // Hide splash
+
   setTimeout(function(){document.getElementById('splash').classList.add('gone')},1600);
 }
-
 init();
 </script>
 </body>
-</html>
+                       </html>
