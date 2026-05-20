@@ -7,9 +7,6 @@
     "allowNavigation": ["*"]
   },
   "plugins": {
-    "CapacitorHttp": {
-      "enabled": true
-    },
     "StatusBar": {
       "style": "dark",
       "backgroundColor": "#0b1021"
@@ -20,8 +17,7 @@
   },
   "android": {
     "backgroundColor": "#0b1021",
-    "allowMixedContent": true,
-    "useLegacyBridge": false
+    "allowMixedContent": true
   },
   "ios": {
     "backgroundColor": "#0b1021",
