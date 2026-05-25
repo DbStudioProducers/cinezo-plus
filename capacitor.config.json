@@ -17,7 +17,8 @@
   },
   "android": {
     "backgroundColor": "#0b1021",
-    "allowMixedContent": true
+    "allowMixedContent": true,
+    "captureInput": true
   },
   "ios": {
     "backgroundColor": "#0b1021",
