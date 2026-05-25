@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
 :root{--bg:#0b1021;--bg-s:#131a2e;--bg-c:#1a2240;--bg-e:#212b4a;--acc:#0063e5;--acc-g:rgba(0,99,229,.35);--tx:#f0f1f5;--tx-m:#8990a8;--tx-d:#5a6178;--bd:rgba(255,255,255,.06);--nav:58px;--rad:8px;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -95,7 +96,7 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 #p-bar .pb:hover{background:rgba(255,255,255,.1)}
 #p-bar .pt{flex:1;font-size:.82rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #p-wrap{flex:1;position:relative;background:#000}
-#p-wrap iframe{width:100%;height:100%;border:none;position:absolute;inset:0}
+#p-wrap iframe,#p-wrap video{width:100%;height:100%;border:none;position:absolute;inset:0;background:#000}
 #p-load{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--tx-m);z-index:5}
 #p-load i{font-size:1.8rem;color:var(--acc);animation:sp 1s linear infinite}
 #p-err{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--tx-m);text-align:center;padding:24px;z-index:5}
@@ -143,7 +144,7 @@ footer{padding:20px 16px calc(20px + var(--safe-bottom));text-align:center;color
     <div id="dots"></div>
   </div>
   <div id="secs"></div>
-  <footer>CineZo+ v3.0</footer>
+  <footer>CineZo+ v4.0</footer>
 </main>
 <div id="mdl-ov">
   <div id="mdl">
@@ -175,24 +176,15 @@ footer{padding:20px 16px calc(20px + var(--safe-bottom));text-align:center;color
   <div id="p-wrap">
     <div id="p-load"><i class="fas fa-spinner"></i><span>Carregando...</span></div>
     <div id="p-err"><i class="fas fa-exclamation-triangle"></i><span>Erro ao carregar. Tente outro servidor.</span><button class="bw" id="pe-retry" style="margin-top:8px"><i class="fas fa-redo"></i> Trocar Servidor</button></div>
-    <iframe id="p-frame" allowfullscreen allow="autoplay;encrypted-media;fullscreen;picture-in-picture" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"></iframe>
+    <iframe id="p-frame" allowfullscreen allow="autoplay;encrypted-media;fullscreen;picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    <video id="p-video" controls autoplay playsinline webkit-playsinline style="display:none"></video>
     <div id="p-tap"></div>
   </div>
 </div>
 <div id="toasts"></div>
 <script>
-/* ============================================================
-   CineZo+ v3.0
-   Filmes/Series: TMDB API + Embed Players
-   TV ao Vivo: iptv-org M3U
-   Auto-update: version.json
-   ============================================================ */
-
-// === COLE SUA CHAVE TMDB AQUI ===
 var TMDB_KEY = '2564ea1dcd828935333abd8ad31decf9';
-// ================================
-
-var APP_VER = 3;
+var APP_VER = 4;
 var TMDB = 'https://api.themoviedb.org/3';
 var IMG = 'https://image.tmdb.org/t/p/w500';
 var IMG_BG = 'https://image.tmdb.org/t/p/w1280';
@@ -200,24 +192,23 @@ var IMG_BG = 'https://image.tmdb.org/t/p/w1280';
 var EMBEDS = [
   function(id, t) {
     return t === 'movie'
-      ? 'https://smashystream.autoembed.cc/embed/movie/' + id
-      : 'https://smashystream.autoembed.cc/embed/tv/' + id + '/1/1';
-  },
-  function(id, t) {
-    return 'https://2embed.cc/embed/' + id;
+      ? 'https://vidsrc.xyz/embed/movie?tmdb=' + id
+      : 'https://vidsrc.xyz/embed/tv?tmdb=' + id + '&season=1&episode=1';
   },
   function(id, t) {
     return t === 'movie'
-      ? 'https://vidsrc.xyz/embed/movie?tmdb=' + id
-      : 'https://vidsrc.xyz/embed/tv?tmdb=' + id + '&season=1&episode=1';
+      ? 'https://vidsrc.to/embed/movie/' + id
+      : 'https://vidsrc.to/embed/tv/' + id + '/1/1';
+  },
+  function(id, t) {
+    return 'https://2embed.cc/embed/' + id;
   }
 ];
 
-var S = { items:[], hero:[], hi:0, hT:null, cat:'home', q:'', cur:null, barT:null, tvChannels:[] };
+var S = { items:[], hero:[], hi:0, hT:null, cat:'home', q:'', cur:null, barT:null, tvChannels:[], hlsInst:null };
 
 function toast(m, t) {
-  t = t || 'i';
-  var c = document.getElementById('toasts'), e = document.createElement('div');
+  t = t || 'i'; var c = document.getElementById('toasts'), e = document.createElement('div');
   e.className = 'tst ' + t[0];
   var ic = t === 'e' ? 'exclamation-circle' : t === 's' ? 'check-circle' : 'info-circle';
   e.innerHTML = '<i class="fas fa-' + ic + '"></i>' + m;
@@ -226,9 +217,7 @@ function toast(m, t) {
 }
 
 function tmdb(ep, params) {
-  var p = params || {};
-  p.api_key = TMDB_KEY;
-  p.language = 'pt-BR';
+  var p = params || {}; p.api_key = TMDB_KEY; p.language = 'pt-BR';
   var qs = Object.keys(p).map(function(k) { return k + '=' + encodeURIComponent(p[k]) }).join('&');
   return fetch(TMDB + ep + '?' + qs).then(function(r) { if (!r.ok) throw new Error('TMDB ' + r.status); return r.json() });
 }
@@ -236,30 +225,19 @@ function tmdb(ep, params) {
 /* === AUTO UPDATE === */
 function checkUpdate() {
   fetch('version.json?t=' + Date.now()).then(function(r) { return r.json() }).then(function(d) {
-    if (d.version && d.version > APP_VER) {
-      toast('Atualizando app...', 'i');
-      setTimeout(function() { window.location.reload(true) }, 1500);
-    }
+    if (d.version && d.version > APP_VER) { toast('Atualizando app...', 'i'); setTimeout(function() { window.location.reload(true) }, 1500); }
   }).catch(function() {});
 }
 
 /* === HERO === */
 function rHero() {
-  var h = S.hero; if (!h.length) return;
-  var c = h[S.hi];
+  var h = S.hero; if (!h.length) return; var c = h[S.hi];
   document.getElementById('hero-bg').style.backgroundImage = "url('" + IMG_BG + (c.backdrop_path || '') + "')";
   document.getElementById('htitle').textContent = c.title || c.name || '';
   document.getElementById('hdesc').textContent = c.overview || 'Assista agora no CineZo+';
   var d = document.getElementById('dots'); d.innerHTML = '';
   var n = Math.min(h.length, 8);
-  for (var i = 0; i < n; i++) {
-    (function(idx) {
-      var b = document.createElement('button');
-      b.className = idx === S.hi ? 'on' : '';
-      b.onclick = function() { S.hi = idx; rHero(); rHT() };
-      d.appendChild(b);
-    })(i);
-  }
+  for (var i = 0; i < n; i++) { (function(idx) { var b = document.createElement('button'); b.className = idx === S.hi ? 'on' : ''; b.onclick = function() { S.hi = idx; rHero(); rHT() }; d.appendChild(b); })(i); }
 }
 function nHero() { if (S.hero.length < 2) return; S.hi = (S.hi + 1) % Math.min(S.hero.length, 8); rHero(); }
 function rHT() { clearInterval(S.hT); S.hT = setInterval(nHero, 6000); }
@@ -269,17 +247,14 @@ function mkCard(o) {
   var d = document.createElement('div'); d.className = 'cd'; d.tabIndex = 0;
   var img = o.backdrop_path ? IMG + o.backdrop_path : (o.poster_path ? IMG + o.poster_path : '');
   var fb = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 180'%3E%3Crect fill='%231a2240' width='320' height='180'/%3E%3Ctext x='160' y='90' fill='%235a6178' text-anchor='middle' font-size='12'%3ESem imagem%3C/text%3E%3C/svg%3E";
-  var title = o.title || o.name || 'Sem titulo';
-  var year = (o.release_date || o.first_air_date || '').substring(0, 4);
+  var title = o.title || o.name || 'Sem titulo'; var year = (o.release_date || o.first_air_date || '').substring(0, 4);
   d.innerHTML = '<img src="' + img + '" alt="' + title + '" loading="lazy" onerror="this.src=\'' + fb + '\'"><div class="ov"><div class="play"><i class="fas fa-play" style="margin-left:2px"></i></div><h3>' + title + '</h3><div class="sub">' + (year ? year + ' — ' : '') + (o.vote_average ? (o.vote_average).toFixed(1) + ' ⭐' : '') + '</div></div>';
-  d.onclick = function() { openMdl(o) };
-  return d;
+  d.onclick = function() { openMdl(o) }; return d;
 }
 function mkSk(n) { var a = []; for (var i = 0; i < (n || 8); i++) { var d = document.createElement('div'); d.className = 'sk'; d.innerHTML = '<div class="si"></div>'; a.push(d) } return a }
 
 function rSec(title, items, ctn) {
-  if (!items.length) return;
-  var sec = document.createElement('section'); sec.className = 'sec';
+  if (!items.length) return; var sec = document.createElement('section'); sec.className = 'sec';
   var id = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   sec.innerHTML = '<div class="sec-h"><h2>' + title + '</h2></div><div class="cw"><button class="arr l"><i class="fas fa-chevron-left"></i></button><div class="cr" id="r-' + id + '"></div><button class="arr r"><i class="fas fa-chevron-right"></i></button></div>';
   var row = sec.querySelector('.cr');
@@ -287,30 +262,15 @@ function rSec(title, items, ctn) {
   sec.querySelector('.arr.l').onclick = function() { row.scrollBy({ left: -500, behavior: 'smooth' }) };
   sec.querySelector('.arr.r').onclick = function() { row.scrollBy({ left: 500, behavior: 'smooth' }) };
   ctn.appendChild(sec);
-  requestAnimationFrame(function() {
-    var ob = new IntersectionObserver(function(es) { es.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('vis'); ob.unobserve(e.target) } }) }, { threshold: .05 });
-    ob.observe(sec);
-  });
+  requestAnimationFrame(function() { var ob = new IntersectionObserver(function(es) { es.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('vis'); ob.unobserve(e.target) } }) }, { threshold: .05 }); ob.observe(sec); });
 }
 
 /* === LOAD HOME === */
 function loadHome() {
   var c = document.getElementById('secs'); c.innerHTML = '';
-  var tmp = document.createElement('div'); tmp.className = 'cw';
-  var cr = document.createElement('div'); cr.className = 'cr';
-  var sk = mkSk(10); for (var i = 0; i < sk.length; i++) cr.appendChild(sk[i]);
-  tmp.appendChild(cr); c.appendChild(tmp);
-
-  Promise.all([
-    tmdb('/trending/movie/week'),
-    tmdb('/trending/tv/week'),
-    tmdb('/movie/popular'),
-    tmdb('/tv/popular'),
-    tmdb('/movie/now_playing'),
-    tmdb('/tv/on_the_air')
-  ]).then(function(r) {
-    c.innerHTML = '';
-    var trending = [].concat(r[0].results || [], r[1].results || []);
+  var tmp = document.createElement('div'); tmp.className = 'cw'; var cr = document.createElement('div'); cr.className = 'cr'; var sk = mkSk(10); for (var i = 0; i < sk.length; i++) cr.appendChild(sk[i]); tmp.appendChild(cr); c.appendChild(tmp);
+  Promise.all([tmdb('/trending/movie/week'), tmdb('/trending/tv/week'), tmdb('/movie/popular'), tmdb('/tv/popular'), tmdb('/movie/now_playing'), tmdb('/tv/on_the_air')]).then(function(r) {
+    c.innerHTML = ''; var trending = [].concat(r[0].results || [], r[1].results || []);
     S.hero = trending.filter(function(i) { return i.backdrop_path }).slice(0, 8); S.hi = 0; rHero(); rHT();
     if (r[0].results && r[0].results.length) rSec('Filmes em Alta', r[0].results, c);
     if (r[1].results && r[1].results.length) rSec('Series em Alta', r[1].results, c);
@@ -318,129 +278,74 @@ function loadHome() {
     if (r[2].results && r[2].results.length) rSec('Filmes Populares', r[2].results, c);
     if (r[3].results && r[3].results.length) rSec('Series Populares', r[3].results, c);
     if (r[5].results && r[5].results.length) rSec('Series no Ar', r[5].results, c);
-  }).catch(function(e) { console.error(e); c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-circle"></i><h3>Erro ao carregar</h3><p>Verifique sua chave TMDB</p></div>' });
+  }).catch(function(e) { console.error(e); c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-circle"></i><h3>Erro ao carregar</h3><p>Verifique sua conexao</p></div>' });
 }
 
 /* === LOAD CATEGORY === */
 function loadCat(cat) {
-  S.cat = cat;
-  var bs = document.querySelectorAll('.cats button');
-  for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('on', bs[i].getAttribute('data-c') === cat);
-  if (cat === 'home') { loadHome(); return }
-  if (cat === 'tv') { loadTV(); return }
+  S.cat = cat; var bs = document.querySelectorAll('.cats button'); for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('on', bs[i].getAttribute('data-c') === cat);
+  if (cat === 'home') { loadHome(); return } if (cat === 'tv') { loadTV(); return }
   var c = document.getElementById('secs'); c.innerHTML = '';
   var tmp = document.createElement('div'); tmp.className = 'cw'; var cr = document.createElement('div'); cr.className = 'cr'; var sk = mkSk(10); for (var i = 0; i < sk.length; i++) cr.appendChild(sk[i]); tmp.appendChild(cr); c.appendChild(tmp);
   var eps = cat === 'filmes' ? ['/movie/popular', '/movie/now_playing', '/movie/top_rated', '/movie/upcoming'] : ['/tv/popular', '/tv/on_the_air', '/tv/top_rated', '/tv/airing_today'];
   var names = cat === 'filmes' ? ['Populares', 'Nos Cinemas', 'Mais Votados', 'Em Breve'] : ['Populares', 'No Ar', 'Mais Votadas', 'Exibindo Hoje'];
-  Promise.all(eps.map(function(e) { return tmdb(e) })).then(function(r) {
-    c.innerHTML = '';
-    for (var i = 0; i < r.length; i++) { if (r[i].results && r[i].results.length) rSec(names[i], r[i].results, c) }
-  }).catch(function() { c.innerHTML = '<div class="empty"><i class="fas fa-film"></i><h3>Erro</h3></div>' });
+  Promise.all(eps.map(function(e) { return tmdb(e) })).then(function(r) { c.innerHTML = ''; for (var i = 0; i < r.length; i++) { if (r[i].results && r[i].results.length) rSec(names[i], r[i].results, c) } }).catch(function() { c.innerHTML = '<div class="empty"><i class="fas fa-film"></i><h3>Erro</h3></div>' });
 }
 
 /* === SEARCH === */
 function doSearch(q) {
-  if (!q) { loadCat(S.cat); return }
-  var c = document.getElementById('secs'); c.innerHTML = '';
-  tmdb('/search/multi', { query: q }).then(function(r) {
-    var items = (r.results || []).filter(function(i) { return i.media_type === 'movie' || i.media_type === 'tv' });
-    if (items.length) rSec('Resultados para "' + q + '"', items, c);
-    else c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>Nenhum resultado</h3></div>';
-  }).catch(function() { c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>Erro na busca</h3></div>' });
+  if (!q) { loadCat(S.cat); return } var c = document.getElementById('secs'); c.innerHTML = '';
+  tmdb('/search/multi', { query: q }).then(function(r) { var items = (r.results || []).filter(function(i) { return i.media_type === 'movie' || i.media_type === 'tv' }); if (items.length) rSec('Resultados para "' + q + '"', items, c); else c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>Nenhum resultado</h3></div>'; }).catch(function() { c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>Erro na busca</h3></div>' });
 }
 
-/* === TV AO VIVO (M3U) === */
+/* === TV AO VIVO === */
 function parseM3U(text) {
-  var lines = text.split('\n');
-  var channels = [];
+  var lines = text.split('\n'); var channels = [];
   for (var i = 0; i < lines.length; i++) {
     if (lines[i].indexOf('#EXTINF') === 0) {
       var logoMatch = lines[i].match(/tvg-logo="([^"]*)"/);
       var nameMatch = lines[i].match(/,(.+)$/);
       var url = '';
-      for (var j = i + 1; j < lines.length; j++) {
-        if (lines[j].trim() && lines[j].charAt(0) !== '#') { url = lines[j].trim(); break }
+      for (var j = i + 1; j < Math.min(i + 3, lines.length); j++) {
+        var ln = lines[j].trim();
+        if (ln && ln.charAt(0) !== '#') { url = ln; break }
       }
-      if (url && nameMatch) {
-        channels.push({
-          name: nameMatch[1].trim(),
-          logo: logoMatch ? logoMatch[1] : '',
-          url: url
-        });
-      }
+      if (url && nameMatch) channels.push({ name: nameMatch[1].trim(), logo: logoMatch ? logoMatch[1] : '', url: url });
     }
   }
   return channels;
 }
 
 function loadTV() {
-  var c = document.getElementById('secs');
-  c.innerHTML = '<div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Carregando canais...</h3></div>';
-
-  fetch('https://iptv-org.github.io/iptv/countries/br.m3u').then(function(r) {
-    if (!r.ok) throw new Error('status');
-    return r.text();
-  }).then(function(text) {
-    var channels = parseM3U(text);
-    S.tvChannels = channels.filter(function(ch) { return ch.logo });
-    c.innerHTML = '';
-
-    if (!S.tvChannels.length) {
-      c.innerHTML = '<div class="empty"><i class="fas fa-tv"></i><h3>Nenhum canal encontrado</h3></div>';
-      return;
-    }
-
+  var c = document.getElementById('secs'); c.innerHTML = '<div class="empty"><i class="fas fa-spinner fa-spin"></i><h3>Carregando canais...</h3></div>';
+  fetch('https://iptv-org.github.io/iptv/countries/br.m3u').then(function(r) { if (!r.ok) throw new Error(''); return r.text() }).then(function(text) {
+    var channels = parseM3U(text); S.tvChannels = channels.filter(function(ch) { return ch.logo }); c.innerHTML = '';
+    if (!S.tvChannels.length) { c.innerHTML = '<div class="empty"><i class="fas fa-tv"></i><h3>Nenhum canal encontrado</h3></div>'; return; }
     var grid = document.createElement('div'); grid.className = 'tv-grid';
+    var fb2 = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%231a2240' width='100' height='100'/%3E%3Ctext x='50' y='55' fill='%235a6178' text-anchor='middle' font-size='10'%3ETV%3C/text%3E%3C/svg%3E";
     for (var i = 0; i < S.tvChannels.length; i++) {
-      (function(ch) {
-        var card = document.createElement('div'); card.className = 'tv-card';
-        var fb2 = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%231a2240' width='100' height='100'/%3E%3Ctext x='50' y='55' fill='%235a6178' text-anchor='middle' font-size='10'%3ETV%3C/text%3E%3C/svg%3E";
-        card.innerHTML = '<img src="' + ch.logo + '" alt="' + ch.name + '" onerror="this.src=\'' + fb2 + '\'"><div class="tv-name">' + ch.name + '</div>';
-        card.onclick = function() { playTV(ch) };
-        grid.appendChild(card);
-      })(S.tvChannels[i]);
+      (function(ch) { var card = document.createElement('div'); card.className = 'tv-card'; card.innerHTML = '<img src="' + ch.logo + '" alt="' + ch.name + '" onerror="this.src=\'' + fb2 + '\'"><div class="tv-name">' + ch.name + '</div>'; card.onclick = function() { playTV(ch) }; grid.appendChild(card); })(S.tvChannels[i]);
     }
     c.appendChild(grid);
-  }).catch(function(e) {
-    console.error(e);
-    c.innerHTML = '<div class="empty"><i class="fas fa-tv"></i><h3>Erro ao carregar canais</h3><p>Tente novamente</p></div>';
-  });
+  }).catch(function() { c.innerHTML = '<div class="empty"><i class="fas fa-tv"></i><h3>Erro ao carregar canais</h3></div>' });
 }
 
 /* === MODAL === */
 function openMdl(o) {
-  S.cur = o;
-  var type = o.media_type || (o.first_air_date ? 'tv' : 'movie');
-  var title = o.title || o.name || '';
+  S.cur = o; var type = o.media_type || (o.first_air_date ? 'tv' : 'movie'); var title = o.title || o.name || '';
   var year = (o.release_date || o.first_air_date || '').substring(0, 4);
   var img = o.backdrop_path ? IMG_BG + o.backdrop_path : (o.poster_path ? IMG_BG + o.poster_path : '');
-  document.getElementById('mdl-img').src = img;
-  document.getElementById('mdl-t').textContent = title;
+  document.getElementById('mdl-img').src = img; document.getElementById('mdl-t').textContent = title;
   document.getElementById('mdl-desc').textContent = o.overview || 'Sem descricao disponivel.';
   var meta = '<span><i class="fas fa-' + (type === 'movie' ? 'film' : 'tv') + '"></i> ' + (type === 'movie' ? 'Filme' : 'Serie') + '</span>';
   if (year) meta += '<span><i class="fas fa-calendar"></i> ' + year + '</span>';
   if (o.vote_average) meta += '<span style="color:#f6c02e"><i class="fas fa-star"></i> ' + o.vote_average.toFixed(1) + '</span>';
   document.getElementById('mdl-meta').innerHTML = meta;
-
-  document.getElementById('srvs-wrap').style.display = 'block';
-  var sl = document.getElementById('srv-list'); sl.innerHTML = '';
+  document.getElementById('srvs-wrap').style.display = 'block'; var sl = document.getElementById('srv-list'); sl.innerHTML = '';
   for (var i = 0; i < EMBEDS.length; i++) {
-    (function(idx) {
-      var b = document.createElement('button');
-      b.textContent = 'Servidor ' + (idx + 1);
-      if (idx === 0) b.className = 'on';
-      b.onclick = function() {
-        S.cur._srv = idx;
-        var bs = sl.querySelectorAll('button');
-        for (var j = 0; j < bs.length; j++) bs[j].className = '';
-        b.className = 'on';
-      };
-      sl.appendChild(b);
-    })(i);
+    (function(idx) { var b = document.createElement('button'); b.textContent = 'Servidor ' + (idx + 1); if (idx === 0) b.className = 'on'; b.onclick = function() { S.cur._srv = idx; var bs = sl.querySelectorAll('button'); for (var j = 0; j < bs.length; j++) bs[j].className = ''; b.className = 'on'; }; sl.appendChild(b); })(i);
   }
-  S.cur._srv = 0;
-  document.getElementById('mdl-ov').classList.add('on');
-  document.body.style.overflow = 'hidden';
+  S.cur._srv = 0; document.getElementById('mdl-ov').classList.add('on'); document.body.style.overflow = 'hidden';
   document.getElementById('mdl-play').onclick = function() { playItem(S.cur) };
   document.getElementById('mdl-play-big').onclick = function() { playItem(S.cur) };
 }
@@ -448,34 +353,57 @@ function closeMdl() { document.getElementById('mdl-ov').classList.remove('on'); 
 
 /* === PLAYER === */
 function playItem(o) {
-  if (!o) return;
-  var type = o.media_type || (o.first_air_date ? 'tv' : 'movie');
-  var id = o.id;
-  var srv = (o._srv || 0) % EMBEDS.length;
-  var url = EMBEDS[srv](id, type);
-  openPlayer(url, o.title || o.name || '');
+  if (!o) return; var type = o.media_type || (o.first_air_date ? 'tv' : 'movie'); var id = o.id;
+  var srv = (o._srv || 0) % EMBEDS.length; var url = EMBEDS[srv](id, type);
+  openPlayer(url, o.title || o.name || '', false);
 }
 
-function playTV(ch) { openPlayer(ch.url, ch.name) }
+function playTV(ch) { openPlayer(ch.url, ch.name, true); }
 
-function openPlayer(url, title) {
-  var pov = document.getElementById('player'), pl = document.getElementById('p-load'), pe = document.getElementById('p-err'), pf = document.getElementById('p-frame');
-  pov.classList.add('on'); pl.style.display = 'flex'; pe.style.display = 'none'; pf.style.display = 'none'; pf.src = 'about:blank';
-  document.getElementById('p-title').textContent = title;
-  document.body.style.overflow = 'hidden';
+function openPlayer(url, title, isVideo) {
+  var pov = document.getElementById('player'), pl = document.getElementById('p-load'), pe = document.getElementById('p-err');
+  var pf = document.getElementById('p-frame'), pv = document.getElementById('p-video');
+  pov.classList.add('on'); pl.style.display = 'flex'; pe.style.display = 'none';
+  document.getElementById('p-title').textContent = title; document.body.style.overflow = 'hidden';
+
+  // Destroi HLS anterior se existir
+  if (S.hlsInst) { S.hlsInst.destroy(); S.hlsInst = null; }
+  pf.style.display = 'none'; pf.src = 'about:blank'; pv.style.display = 'none'; pv.src = '';
+
   document.getElementById('pe-retry').onclick = function() {
-    if (S.cur) {
-      S.cur._srv = ((S.cur._srv || 0) + 1) % EMBEDS.length;
-      playItem(S.cur);
-    }
+    if (S.cur) { S.cur._srv = ((S.cur._srv || 0) + 1) % EMBEDS.length; playItem(S.cur); }
   };
-  pf.onload = function() { pl.style.display = 'none'; pe.style.display = 'none'; pf.style.display = 'block' };
-  pf.onerror = function() { pl.style.display = 'none'; pe.style.display = 'flex' };
-  pf.src = url;
-  setTimeout(function() { if (pl.style.display !== 'none') { pl.style.display = 'none'; pf.style.display = 'block' } }, 8000);
+
+  if (isVideo) {
+    // TV AO VIVO - usa tag <video> com HLS.js
+    pv.style.display = 'block';
+    if (url.indexOf('.m3u8') !== -1 && typeof Hls !== 'undefined' && Hls.isSupported()) {
+      var hls = new Hls(); S.hlsInst = hls;
+      hls.loadSource(url); hls.attachMedia(pv);
+      hls.on(Hls.Events.MANIFEST_PARSED, function() { pl.style.display = 'none'; pv.play(); });
+      hls.on(Hls.Events.ERROR, function(event, data) { if (data.fatal) { pl.style.display = 'none'; pe.style.display = 'flex'; } });
+    } else {
+      pv.src = url; pv.onloadeddata = function() { pl.style.display = 'none'; };
+      pv.onerror = function() { pl.style.display = 'none'; pe.style.display = 'flex'; };
+      pv.play().catch(function() {});
+    }
+  } else {
+    // FILMES/SERIES - usa iframe
+    pf.style.display = 'block';
+    pf.onload = function() { pl.style.display = 'none'; pe.style.display = 'none'; };
+    pf.onerror = function() { pl.style.display = 'none'; pe.style.display = 'flex'; };
+    pf.src = url;
+    setTimeout(function() { if (pl.style.display !== 'none') { pl.style.display = 'none'; } }, 10000);
+  }
 }
 
-function closePlayer() { document.getElementById('player').classList.remove('on'); document.getElementById('p-frame').src = 'about:blank'; document.body.style.overflow = ''; clearTimeout(S.barT) }
+function closePlayer() {
+  document.getElementById('player').classList.remove('on');
+  var pf = document.getElementById('p-frame'); pf.src = 'about:blank'; pf.style.display = 'none';
+  var pv = document.getElementById('p-video'); pv.pause(); pv.src = ''; pv.style.display = 'none';
+  if (S.hlsInst) { S.hlsInst.destroy(); S.hlsInst = null; }
+  document.body.style.overflow = ''; clearTimeout(S.barT);
+}
 function toggleBar() { var b = document.getElementById('p-bar'); b.classList.toggle('hide'); clearTimeout(S.barT); if (!b.classList.contains('hide')) S.barT = setTimeout(function() { b.classList.add('hide') }, 4000) }
 
 /* === REFRESH === */
@@ -504,21 +432,9 @@ function init() {
   window.addEventListener('scroll', function() { document.getElementById('nav').style.boxShadow = window.scrollY > 30 ? '0 2px 12px rgba(0,0,0,.3)' : 'none' }, { passive: true });
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { if (document.getElementById('player').classList.contains('on')) closePlayer(); else closeMdl() } });
 
-  if (TMDB_KEY === 'SUA_CHAVE_TMDB_AQUI') {
-    document.getElementById('htitle').textContent = 'CineZo+';
-    document.getElementById('hdesc').textContent = 'Configure sua chave TMDB para comecar';
-    document.getElementById('hero-bg').style.background = 'linear-gradient(135deg,#0b1021,#1a2240,#0b1021)';
-    document.getElementById('secs').innerHTML = '<div class="empty"><i class="fas fa-key"></i><h3>Chave TMDB necessaria</h3><p>Obtenha gratuitamente em themoviedb.org e cole no codigo</p></div>';
-    setTimeout(function() { document.getElementById('splash').classList.add('gone') }, 1600);
-    return;
-  }
-
   loadHome();
   setTimeout(function() { document.getElementById('splash').classList.add('gone') }, 1600);
-
-  // Auto-update: verifica a cada 60 segundos
-  checkUpdate();
-  setInterval(checkUpdate, 60000);
+  checkUpdate(); setInterval(checkUpdate, 60000);
 }
 init();
 </script>
