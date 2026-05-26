@@ -7,7 +7,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0b1021">
-<meta name="referrer" content="no-referrer">
 <title>CineZo+</title>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,9 +22,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;-webkit-tap-highlight-color:transparent}img{display:block;max-width:100%}
 #splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s,visibility .4s}
 #splash.gone{opacity:0;visibility:hidden;pointer-events:none}
-.s-logo{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,#0063e5,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.s-bar{margin-top:20px;width:140px;height:3px;background:var(--bg-c);border-radius:3px;overflow:hidden}
-.s-fill{height:100%;width:0;background:linear-gradient(90deg,#0063e5,#00d4ff);animation:lf 1.6s ease forwards}
+.sl{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,#0063e5,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sb2{margin-top:20px;width:140px;height:3px;background:var(--bg-c);border-radius:3px;overflow:hidden}
+.sf{height:100%;width:0;background:linear-gradient(90deg,#0063e5,#00d4ff);animation:lf 1.6s ease forwards}
 @keyframes lf{to{width:100%}}
 #nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding-top:var(--st);height:calc(var(--nav) + var(--st));display:flex;align-items:center;gap:8px;padding-left:12px;padding-right:12px;background:rgba(11,16,33,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
 .brand{font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,#0063e5,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;width:36px;text-align:center;flex-shrink:0}
@@ -83,12 +82,13 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 #mbd{padding:0 16px calc(16px + var(--sb));margin-top:-18px;position:relative;z-index:2}
 #mbd h2{font-size:1.2rem;font-weight:900;margin-bottom:5px}
 .mm{display:flex;gap:8px;flex-wrap:wrap;font-size:.66rem;color:var(--tx-m);margin-bottom:10px}.mm span{display:flex;align-items:center;gap:3px}
-.md{font-size:.8rem;line-height:1.6;color:var(--tx-m);margin-bottom:14px}
+.mds{font-size:.8rem;line-height:1.6;color:var(--tx-m);margin-bottom:14px}
 .mbs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.sv{margin-top:8px}.sv h4{font-size:.74rem;font-weight:700;margin-bottom:5px;color:var(--tx-m)}
-.sv .sl{display:flex;gap:5px;flex-wrap:wrap}
-.sv button{padding:4px 10px;border-radius:4px;background:var(--bg-c);border:1px solid var(--bd);font-size:.68rem;font-weight:600;color:var(--tx-m);transition:.2s}
-.sv button:hover,.sv button.on{border-color:var(--acc);color:var(--acc);background:rgba(0,99,229,.08)}
+.srv{margin-top:8px}.srv h4{font-size:.74rem;font-weight:700;margin-bottom:5px;color:var(--tx-m)}
+.srv .sl{display:flex;gap:5px;flex-wrap:wrap}
+.srv button{padding:4px 10px;border-radius:4px;background:var(--bg-c);border:1px solid var(--bd);font-size:.68rem;font-weight:600;color:var(--tx-m);transition:.2s}
+.srv button:hover,.srv button.on{border-color:var(--acc);color:var(--acc);background:rgba(0,99,229,.08)}
+
 #plr{position:fixed;inset:0;z-index:3000;background:#000;display:none;flex-direction:column}
 #plr.on{display:flex}
 #pb{padding-top:var(--st);height:calc(42px + var(--st));display:flex;align-items:center;gap:8px;padding-left:10px;padding-right:10px;background:linear-gradient(180deg,rgba(0,0,0,.85),transparent);position:absolute;top:0;left:0;right:0;z-index:10;transition:opacity .3s}
@@ -97,7 +97,7 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 #pb .pbi:hover{background:rgba(255,255,255,.1)}
 #pb .ptt{flex:1;font-size:.78rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #pw{flex:1;position:relative;background:#000}
-#pw iframe,#pw video{width:100%;height:100%;border:none;position:absolute;inset:0;background:#000}
+#pw video{width:100%;height:100%;border:none;position:absolute;inset:0;background:#000}
 #pld{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx-m);z-index:5}
 #pld i{font-size:1.6rem;color:var(--acc);animation:sp 1s linear infinite}
 #per{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx-m);text-align:center;padding:20px;z-index:5}
@@ -115,7 +115,7 @@ footer{padding:16px 14px calc(16px + var(--sb));text-align:center;color:var(--tx
 </style>
 </head>
 <body>
-<div id="splash"><div class="s-logo">CineZo+</div><div class="s-bar"><div class="s-fill"></div></div></div>
+<div id="splash"><div class="sl">CineZo+</div><div class="sb2"><div class="sf"></div></div></div>
 <nav id="nav">
   <div class="brand">CZ+</div>
   <div class="cats" id="cats">
@@ -139,7 +139,7 @@ footer{padding:16px 14px calc(16px + var(--sb));text-align:center;color:var(--tx
       <p id="hdesc"></p>
       <div class="hb">
         <button class="bw" id="hplay"><i class="fas fa-play"></i> Assistir</button>
-        <button class="bg" id="hinfo"><i class="fas fa-info-circle"></i> Detalhes</button>
+        <button class="bg" id="hinfobtn"><i class="fas fa-info-circle"></i> Detalhes</button>
       </div>
     </div>
     <div id="dots"></div>
@@ -157,12 +157,12 @@ footer{padding:16px 14px calc(16px + var(--sb));text-align:center;color:var(--tx
     <div id="mbd">
       <h2 id="mtt"></h2>
       <div class="mm" id="mmeta"></div>
-      <p class="md" id="mdesc"></p>
+      <p class="mds" id="mdesc"></p>
       <div class="mbs">
         <button class="bw" id="mplay"><i class="fas fa-play"></i> Assistir</button>
         <button class="bg" id="mtrailer"><i class="fas fa-film"></i> Trailer</button>
       </div>
-      <div class="sv" id="svwrap">
+      <div class="srv" id="svwrap">
         <h4>Servidores</h4>
         <div class="sl" id="svlist"></div>
       </div>
@@ -176,17 +176,15 @@ footer{padding:16px 14px calc(16px + var(--sb));text-align:center;color:var(--tx
     <button class="pbi" id="pfs"><i class="fas fa-expand"></i></button>
   </div>
   <div id="pw">
-    <div id="pld"><i class="fas fa-spinner"></i><span>Carregando...</span></div>
-    <div id="per"><i class="fas fa-exclamation-triangle"></i><span>Erro ao carregar</span><button class="bw" id="peretry" style="margin-top:6px"><i class="fas fa-redo"></i> Trocar Servidor</button></div>
-    <iframe id="pif" allowfullscreen allow="autoplay;encrypted-media;fullscreen;picture-in-picture" referrerpolicy="no-referrer"></iframe>
-    <video id="pvid" controls autoplay playsinline webkit-playsinline style="display:none"></video>
+    <div id="pld"><i class="fas fa-spinner"></i><span>Carregando canal...</span></div>
+    <div id="per"><i class="fas fa-exclamation-triangle"></i><span>Erro ao carregar canal</span><button class="bw" id="peretry" style="margin-top:6px"><i class="fas fa-redo"></i> Tentar Novamente</button></div>
+    <video id="pvid" controls autoplay playsinline webkit-playsinline></video>
     <div id="ptp"></div>
   </div>
 </div>
 <div id="tst"></div>
 <script>
 var TK='2564ea1dcd828935333abd8ad31decf9';
-var VER=5;
 var TB='https://api.themoviedb.org/3';
 var IM='https://image.tmdb.org/t/p/w500';
 var IB='https://image.tmdb.org/t/p/w1280';
@@ -203,12 +201,19 @@ function toast(m,t){t=t||'i';var c=document.getElementById('tst'),e=document.cre
 
 function api(ep,p){p=p||{};p.api_key=TK;p.language='pt-BR';var qs=Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k])}).join('&');return fetch(TB+ep+'?'+qs).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 
-/* === AUTO UPDATE === */
-function checkUpd(){
-  var url=window.location.href.replace(/index\.html.*/,'')+'version.json?t='+Date.now();
-  fetch(url).then(function(r){return r.json()}).then(function(d){
-    if(d.version&&d.version>VER){toast('Atualizando...','i');setTimeout(function(){window.location.reload(true)},1200)}
-  }).catch(function(){});
+/* === BROWSER PLUGIN === */
+function openExt(url){
+  console.log('[CineZo+] Abrindo: '+url);
+  if(window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Browser){
+    Capacitor.Plugins.Browser.open({url:url}).then(function(){
+      console.log('[CineZo+] Browser aberto');
+    }).catch(function(e){
+      console.log('[CineZo+] Browser erro, tentando window.open: '+e);
+      window.open(url,'_blank');
+    });
+  }else{
+    window.open(url,'_blank');
+  }
 }
 
 /* === HERO === */
@@ -239,27 +244,23 @@ function loadTV(){var c=document.getElementById('secs');c.innerHTML='<div class=
 
 /* === MODAL === */
 function openM(o){S.cur=o;var type=o.media_type||(o.first_air_date?'tv':'movie');var title=o.title||o.name||'';var year=(o.release_date||o.first_air_date||'').substring(0,4);var img=o.backdrop_path?IB+o.backdrop_path:(o.poster_path?IB+o.poster_path:'');document.getElementById('mimg').src=img;document.getElementById('mtt').textContent=title;document.getElementById('mdesc').textContent=o.overview||'Sem descricao disponivel.';var meta='<span><i class="fas fa-'+(type==='movie'?'film':'tv')+'"></i> '+(type==='movie'?'Filme':'Serie')+'</span>';if(year)meta+='<span><i class="fas fa-calendar"></i> '+year+'</span>';if(o.vote_average)meta+='<span style="color:#f6c02e"><i class="fas fa-star"></i> '+o.vote_average.toFixed(1)+'</span>';document.getElementById('mmeta').innerHTML=meta;
-// Servers
 var sl=document.getElementById('svlist');sl.innerHTML='';for(var i=0;i<EM.length;i++){(function(x){var b=document.createElement('button');b.textContent='Servidor '+(x+1);if(x===0)b.className='on';b.onclick=function(){S.cur._srv=x;var bs=sl.querySelectorAll('button');for(var j=0;j<bs.length;j++)bs[j].className='';b.className='on'};sl.appendChild(b)})(i)}S.cur._srv=0;S.ytKey='';
-// Fetch trailer
 var ep=type==='movie'?'/movie/'+o.id+'/videos':'/tv/'+o.id+'/videos';api(ep).then(function(d){if(d.results&&d.results.length){var tr=d.results.find(function(v){return v.type==='Trailer'&&v.site==='YouTube'});if(!tr)tr=d.results.find(function(v){return v.site==='YouTube'});if(tr)S.ytKey=tr.key}}).catch(function(){});
 document.getElementById('mov').classList.add('on');document.body.style.overflow='hidden';
 document.getElementById('mplay').onclick=function(){playItem(S.cur)};document.getElementById('mpb').onclick=function(){playItem(S.cur)};document.getElementById('mtrailer').onclick=function(){playTrailer()}}
 function closeM(){document.getElementById('mov').classList.remove('on');document.body.style.overflow='';S.cur=null}
 
-/* === PLAYER === */
-function playItem(o){if(!o)return;var type=o.media_type||(o.first_air_date?'tv':'movie');var srv=(o._srv||0)%EM.length;var url=EM[srv](o.id,type);toast('Servidor '+(srv+1)+'...','i');openPl(url,o.title||o.name||'',false)}
+/* === PLAY: Movies/Series via Browser Plugin === */
+function playItem(o){if(!o)return;var type=o.media_type||(o.first_air_date?'tv':'movie');var srv=(o._srv||0)%EM.length;var url=EM[srv](o.id,type);toast('Abrindo Servidor '+(srv+1)+'...','i');openExt(url)}
 
-function playTrailer(){if(!S.ytKey){toast('Trailer indisponivel','e');return}var url='https://www.youtube.com/embed/'+S.ytKey+'?autoplay=1&rel=0';toast('Carregando trailer...','i');openPl(url,S.cur?(S.cur.title||S.cur.name||''):'Trailer',false)}
+function playTrailer(){if(!S.ytKey){toast('Trailer indisponivel','e');return}var url='https://www.youtube.com/embed/'+S.ytKey+'?autoplay=1&rel=0';toast('Abrindo trailer...','i');openExt(url)}
 
-function playTV(ch){toast('Canal: '+ch.name,'i');openPl(ch.url,ch.name,true)}
+/* === PLAY: TV via HLS.js in-app === */
+function playTV(ch){var plr=document.getElementById('plr'),pld=document.getElementById('pld'),per=document.getElementById('per'),pvid=document.getElementById('pvid');plr.classList.add('on');pld.style.display='flex';per.style.display='none';document.getElementById('ptitle').textContent=ch.name;document.body.style.overflow='hidden';pvid.style.display='block';pvid.src='';if(S.hls){S.hls.destroy();S.hls=null}
+document.getElementById('peretry').onclick=function(){playTV(ch)};
+if(ch.url.indexOf('.m3u8')!==-1&&typeof Hls!=='undefined'&&Hls.isSupported()){var hls=new Hls();S.hls=hls;hls.loadSource(ch.url);hls.attachMedia(pvid);hls.on(Hls.Events.MANIFEST_PARSED,function(){pld.style.display='none';pvid.play()});hls.on(Hls.Events.ERROR,function(ev,data){if(data.fatal){pld.style.display='none';per.style.display='flex'}})}else{pvid.src=ch.url;pvid.onloadeddata=function(){pld.style.display='none'};pvid.onerror=function(){pld.style.display='none';per.style.display='flex'};pvid.play().catch(function(){})}}
 
-function openPl(url,title,isVid){var plr=document.getElementById('plr'),pld=document.getElementById('pld'),per=document.getElementById('per'),pif=document.getElementById('pif'),pvid=document.getElementById('pvid');plr.classList.add('on');pld.style.display='flex';per.style.display='none';document.getElementById('ptitle').textContent=title;document.body.style.overflow='hidden';
-if(S.hls){S.hls.destroy();S.hls=null}pif.style.display='none';pif.src='about:blank';pvid.style.display='none';pvid.src='';
-document.getElementById('peretry').onclick=function(){if(S.cur){S.cur._srv=((S.cur._srv||0)+1)%EM.length;playItem(S.cur)}};
-if(isVid){pvid.style.display='block';if(url.indexOf('.m3u8')!==-1&&typeof Hls!=='undefined'&&Hls.isSupported()){var hls=new Hls();S.hls=hls;hls.loadSource(url);hls.attachMedia(pvid);hls.on(Hls.Events.MANIFEST_PARSED,function(){pld.style.display='none';pvid.play()});hls.on(Hls.Events.ERROR,function(ev,data){if(data.fatal){pld.style.display='none';per.style.display='flex'}})}else{pvid.src=url;pvid.onloadeddata=function(){pld.style.display='none'};pvid.onerror=function(){pld.style.display='none';per.style.display='flex'};pvid.play().catch(function(){})}}else{pif.style.display='block';pif.onload=function(){pld.style.display='none';per.style.display='none'};pif.onerror=function(){pld.style.display='none';per.style.display='flex'};pif.src=url;setTimeout(function(){if(pld.style.display!=='none'){pld.style.display='none'}},12000)}}
-
-function closePl(){document.getElementById('plr').classList.remove('on');var pif=document.getElementById('pif');pif.src='about:blank';pif.style.display='none';var pvid=document.getElementById('pvid');pvid.pause();pvid.src='';pvid.style.display='none';if(S.hls){S.hls.destroy();S.hls=null}document.body.style.overflow='';clearTimeout(S.barT)}
+function closePl(){document.getElementById('plr').classList.remove('on');var pvid=document.getElementById('pvid');pvid.pause();pvid.src='';if(S.hls){S.hls.destroy();S.hls=null}document.body.style.overflow='';clearTimeout(S.barT)}
 function togBar(){var b=document.getElementById('pb');b.classList.toggle('hide');clearTimeout(S.barT);if(!b.classList.contains('hide'))S.barT=setTimeout(function(){b.classList.add('hide')},4000)}
 
 /* === REFRESH === */
@@ -274,7 +275,7 @@ document.addEventListener('touchend',function(){pulling=false},{passive:true});
 /* === INIT === */
 function init(){
 document.getElementById('hplay').onclick=function(){if(S.hero.length)playItem(S.hero[S.hi])};
-document.getElementById('hinfo').onclick=function(){if(S.hero.length)openM(S.hero[S.hi])};
+document.getElementById('hinfobtn').onclick=function(){if(S.hero.length)openM(S.hero[S.hi])};
 document.getElementById('mx').onclick=closeM;
 document.getElementById('mov').onclick=function(e){if(e.target===e.currentTarget)closeM()};
 document.getElementById('pback').onclick=closePl;
@@ -287,7 +288,6 @@ window.addEventListener('scroll',function(){document.getElementById('nav').style
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.getElementById('plr').classList.contains('on'))closePl();else closeM()}});
 loadHome();
 setTimeout(function(){document.getElementById('splash').classList.add('gone')},1600);
-checkUpd();setInterval(checkUpd,60000);
 }
 init();
 </script>
