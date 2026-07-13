@@ -1,21 +1,147 @@
-{
-  "name": "CineZo+",
-  "short_name": "CineZo+",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#0b1021",
-  "theme_color": "#0b1021",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+workflows:
+  android-debug:
+    name: CineZo+ Android Debug
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+
+    environment:
+      node: v20
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+
+    scripts:
+      - name: Instalar dependências
+        script: |
+          npm install
+
+      - name: Inicializar Capacitor
+        script: |
+          npx cap init CineZo+ com.cinezoplus --web-dir=www || true
+
+      - name: Adicionar plataforma Android
+        script: |
+          npx cap add android || true
+
+      - name: Sincronizar assets web
+        script: |
+          npx cap sync android
+
+      - name: Build Android Debug APK
+        script: |
+          cd android
+          ./gradlew assembleDebug
+
+    artifacts:
+      - android/app/build/outputs/apk/debug/*.apk
+
+    publishing:
+      email:
+        recipients:
+          - seu-email@exemplo.com
+        notify:
+          success: true
+          failure: true
+
+  android-release:
+    name: CineZo+ Android Release
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+
+    environment:
+      node: v20
+      vars:
+        KEYSTORE_BASE64: "SUA_KEYSTORE_BASE64_AQUI"
+        KEYSTORE_PASSWORD: "SUA_SENHA_AQUI"
+        KEY_ALIAS: "cinezoplus"
+        KEY_PASSWORD: "SUA_SENHA_AQUI"
+
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
+
+    scripts:
+      - name: Instalar dependências
+        script: |
+          npm install
+
+      - name: Inicializar Capacitor
+        script: |
+          npx cap init CineZo+ com.cinezoplus --web-dir=www || true
+
+      - name: Adicionar plataforma Android
+        script: |
+          npx cap add android || true
+
+      - name: Sincronizar
+        script: |
+          npx cap sync android
+
+      - name: Decodificar keystore
+        script: |
+          echo $KEYSTORE_BASE64 | base64 --decode > android/keystore.jks
+
+      - name: Build Release APK
+        script: |
+          cd android
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=keystore.jks \
+            -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
+            -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
+            -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk
+
+  ios-debug:
+    name: CineZo+ iOS Debug
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+
+    environment:
+      node: v20
+      xcode: 15.4
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+
+    scripts:
+      - name: Instalar dependências
+        script: |
+          npm install
+
+      - name: Inicializar Capacitor
+        script: |
+          npx cap init CineZo+ com.cinezoplus --web-dir=www || true
+
+      - name: Adicionar plataforma iOS
+        script: |
+          npx cap add ios || true
+
+      - name: Sincronizar
+        script: |
+          npx cap sync ios
+
+      - name: Build iOS
+        script: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -sdk iphoneos -derivedDataPath build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO | xcpretty
+
+    artifacts:
+      - ios/App/build/**/*.app
+
+    publishing:
+      email:
+        recipients:
+          - seu-email@exemplo.com
