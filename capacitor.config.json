@@ -3,7 +3,8 @@
   "appName": "CineZo+",
   "webDir": "www",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "allowNavigation": ["cinezo.net", "*.cinezo.net"]
   },
   "plugins": {
     "StatusBar": {
@@ -11,11 +12,15 @@
       "backgroundColor": "#0b1021"
     },
     "App": {
-      "logsEnabled": true
+      "logsEnabled": false
     }
   },
   "android": {
     "backgroundColor": "#0b1021",
     "allowMixedContent": true
+  },
+  "ios": {
+    "backgroundColor": "#0b1021",
+    "contentInset": "automatic"
   }
 }
